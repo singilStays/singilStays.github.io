@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-ui="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Singil Stay · Directions | 신길스테이 오시는 길</title>
-<meta name="description" content="Step-by-step photo directions from Singil Station (Line 1, Exit 1) to Singil Stay's blue gate. 5 min walk. 신길역 1번 출구에서 신길스테이 파란 대문까지 사진으로 보는 오시는 길.">
+<title>Singil Stay · Directions & Guest Guide | 신길스테이 오시는 길·이용 안내</title>
+<meta name="description" content="Photo directions from Singil Station (Line 1, Exit 1) and Incheon Airport to Singil Stay's blue gate, plus heating, air conditioner, delivery address and parking. 신길역 1번 출구·인천공항에서 오시는 길, 난방·에어컨 사용법, 배달 주소, 공영주차장 안내.">
 <meta name="theme-color" content="#151a3d">
 <meta name="color-scheme" content="dark">
 <meta name="format-detection" content="telephone=no">
@@ -14,8 +14,8 @@
 <!-- Open Graph: KakaoTalk, Facebook, LINE, iMessage link previews -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Singil Stay">
-<meta property="og:title" content="Singil Stay · Directions | 신길스테이 오시는 길">
-<meta property="og:description" content="Singil Station Exit 1 → blue gate, 5 min on foot. 신길역 1번 출구에서 걸어서 5분.">
+<meta property="og:title" content="Singil Stay · Directions & Guest Guide | 신길스테이 안내">
+<meta property="og:description" content="Singil Station Exit 1 → blue gate, 5 min on foot. Airport route, heating, air con, delivery and parking. 신길역 1번 출구에서 걸어서 5분.">
 <meta property="og:url" content="https://singilstay.github.io/singilStay/">
 <meta property="og:image" content="https://singilstay.github.io/singilStay/8.jpg">
 <meta property="og:image:width" content="1262">
@@ -23,10 +23,11 @@
 <meta property="og:image:alt" content="The blue gate of Singil Stay">
 <meta property="og:locale" content="en_US">
 <meta property="og:locale:alternate" content="ko_KR">
+<meta property="og:locale:alternate" content="zh_CN">
 
 <!-- Twitter / X -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Singil Stay · Directions | 신길스테이 오시는 길">
+<meta name="twitter:title" content="Singil Stay · Directions & Guest Guide | 신길스테이 안내">
 <meta name="twitter:description" content="Singil Station Exit 1 → blue gate, 5 min on foot.">
 <meta name="twitter:image" content="https://singilstay.github.io/singilStay/8.jpg">
 
@@ -46,15 +47,17 @@
     --gate: #1d5fd1;       /* the blue gate */
     --gate-light: #4d86ec;
     --sign: #ffd23f;       /* yellow step label */
+    --naver: #03c75a;
     --paper: #f5f6fb;
     --muted: #b6bbdb;
     --radius: 14px;
+    --bar-h: 112px;        /* updated by script to the real header height */
   }
   *, *::before, *::after { box-sizing: border-box; }
-  html { -webkit-text-size-adjust: 100%; scroll-padding-top: calc(64px + env(safe-area-inset-top, 0px)); }
+  html { -webkit-text-size-adjust: 100%; scroll-padding-top: calc(var(--bar-h) + 6px); }
   body {
     margin: 0;
-    font-family: "Nanum Gothic", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    font-family: "Nanum Gothic", "Apple SD Gothic Neo", "Malgun Gothic", "PingFang SC", "Microsoft YaHei", sans-serif;
     background: var(--night);
     color: var(--paper);
     line-height: 1.55;
@@ -63,24 +66,44 @@
   }
   img { display: block; max-width: 100%; height: auto; }
 
+  /* language: only the text in the chosen language is shown */
+  html[data-ui="en"] body [lang]:not([lang="en"]),
+  html[data-ui="ko"] body [lang]:not([lang="ko"]),
+  html[data-ui="zh"] body [lang]:not([lang^="zh"]) { display: none !important; }
+
   /* top bar */
   .bar {
     position: sticky; top: 0; z-index: 10;
-    padding: calc(10px + env(safe-area-inset-top, 0px)) 16px 10px;
+    padding-top: env(safe-area-inset-top, 0px);
     background: rgba(21, 26, 61, .92);
     -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
     border-bottom: 1px solid rgba(255,255,255,.08);
+  }
+  .bar-top {
+    max-width: 640px; margin: 0 auto; padding: 10px 16px 4px;
     display: flex; align-items: center; justify-content: space-between; gap: 12px;
   }
-  .brand { font-weight: 800; font-size: 1.05rem; letter-spacing: -.01em; margin: 0; }
+  .brand { font-weight: 800; font-size: 1.05rem; letter-spacing: -.01em; margin: 0; white-space: nowrap; }
   .brand span { color: var(--gate-light); }
   .lang { display: flex; background: var(--night-2); border-radius: 999px; padding: 3px; }
   .lang button {
-    font: inherit; font-weight: 700; font-size: .9rem;
-    border: 0; border-radius: 999px; padding: 8px 14px; min-height: 40px;
+    font: inherit; font-weight: 700; font-size: .88rem;
+    border: 0; border-radius: 999px; padding: 8px 11px; min-height: 40px;
     background: transparent; color: var(--muted); cursor: pointer;
   }
   .lang button[aria-pressed="true"] { background: var(--paper); color: var(--night); }
+
+  .tabs {
+    max-width: 640px; margin: 0 auto; padding: 0 8px;
+    display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tabs a {
+    flex: none; display: flex; align-items: center; min-height: 46px;
+    padding: 0 10px; border-bottom: 3px solid transparent;
+    color: var(--muted); text-decoration: none; font-weight: 700; font-size: .92rem; white-space: nowrap;
+  }
+  .tabs a[aria-current="page"] { color: var(--paper); border-bottom-color: var(--sign); }
 
   main { max-width: 640px; margin: 0 auto; padding: 0 0 48px; }
 
@@ -104,7 +127,9 @@
     display: grid; place-items: center; font-weight: 800; font-size: 1rem;
   }
   .step h2 { margin: 4px 0 0; font-size: 1.12rem; font-weight: 800; line-height: 1.35; }
-  .step.map .num { background: var(--paper); font-size: .9rem; }
+  .step.map .num, .step.icon .num { background: var(--paper); font-size: .9rem; }
+  .say { margin: -4px 16px 12px 62px; font-size: .98rem; }
+  .say .k { color: var(--sign); font-weight: 800; }
   .shot { display: block; background: var(--night-2); }
   .shot img { width: 100%; }
 
@@ -116,6 +141,21 @@
   }
   .arrive strong { display: block; font-size: 1.35rem; font-weight: 800; margin-bottom: 4px; }
   .arrive p { margin: 0; font-size: 1rem; }
+
+  /* yellow notice, like the step labels */
+  .note {
+    margin: 16px; padding: 14px 16px; border-radius: var(--radius);
+    background: var(--sign); color: var(--night); font-weight: 800; font-size: 1.05rem; line-height: 1.4;
+  }
+
+  /* buttons */
+  .btn {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    min-height: 50px; margin: 16px; padding: 12px 18px; border-radius: 999px;
+    font-weight: 800; font-size: 1rem; text-decoration: none; text-align: center;
+    background: var(--gate); color: #fff;
+  }
+  .btn.naver { background: var(--naver); color: var(--night); }
 
   /* sections */
   .section-title { font-size: 1.05rem; font-weight: 800; margin: 32px 16px 10px; }
@@ -141,7 +181,40 @@
 
   .hint { text-align: center; color: var(--muted); font-size: .8rem; margin: 6px 16px 0; }
 
-  button:focus-visible, summary:focus-visible, a:focus-visible { outline: 3px solid var(--sign); outline-offset: 2px; }
+  /* delivery */
+  .field { margin: 20px 16px 8px; }
+  .field label { display: block; font-weight: 800; margin-bottom: 8px; }
+  .field input {
+    font: inherit; font-size: 1.35rem; font-weight: 800; letter-spacing: .04em;
+    width: 7.5em; padding: 10px 14px; border-radius: 10px;
+    border: 2px solid var(--gate-light); background: var(--night-2); color: var(--paper);
+  }
+  .field input::placeholder { color: rgba(182,187,219,.55); }
+  .err { margin: 8px 0 0; color: var(--sign); font-size: .92rem; font-weight: 700; }
+  .addr { margin: 12px 16px; padding: 16px; border-radius: var(--radius); background: var(--night-2); }
+  .addr .label { margin: 0 0 4px; font-size: .85rem; font-weight: 700; color: var(--muted); }
+  .addr .text { margin: 0 0 14px; font-size: 1.1rem; font-weight: 700; line-height: 1.45; }
+  .room-out { color: var(--sign); }
+  .copy {
+    font: inherit; font-weight: 800; font-size: .95rem; cursor: pointer;
+    border: 0; border-radius: 999px; padding: 10px 20px; min-height: 44px;
+    background: var(--paper); color: var(--night);
+  }
+  .copy .done { display: none; }
+  .copy.is-done { background: var(--sign); }
+  .copy.is-done .idle { display: none; }
+  .copy.is-done .done { display: inline; }
+
+  /* parking fees */
+  .fees { width: calc(100% - 32px); margin: 4px 16px 8px; border-collapse: collapse; font-size: 1rem; }
+  .fees th, .fees td { padding: 12px 4px; text-align: left; border-bottom: 1px solid rgba(255,255,255,.1); }
+  .fees th { color: var(--muted); font-size: .85rem; font-weight: 700; }
+  .fees th:last-child, .fees td:last-child { text-align: right; }
+  .fees td:last-child { font-weight: 800; }
+  .facts { margin: 4px 16px 0; padding: 0; list-style: none; }
+  .facts li { padding: 6px 0; }
+
+  button:focus-visible, summary:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid var(--sign); outline-offset: 2px; }
 
   [hidden] { display: none !important; }
 
@@ -149,211 +222,387 @@
     main { padding-top: 12px; }
     .shot { margin: 0 16px; border-radius: var(--radius); overflow: hidden; }
     details.short .steps { margin: 0; }
+    .btn { max-width: 420px; margin-left: auto; margin-right: auto; }
   }
 </style>
 </head>
 <body>
 
 <header class="bar">
-  <p class="brand">Singil <span>Stay</span></p>
-  <div class="lang" role="group" aria-label="Language">
-    <button type="button" data-set-lang="en" aria-pressed="true">English</button>
-    <button type="button" data-set-lang="ko" aria-pressed="false">한국어</button>
+  <div class="bar-top">
+    <p class="brand">Singil <span>Stay</span></p>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" data-set-lang="en" aria-pressed="true">EN</button>
+      <button type="button" data-set-lang="ko" aria-pressed="false">한국어</button>
+      <button type="button" data-set-lang="zh" aria-pressed="false">中文</button>
+    </div>
   </div>
+  <nav class="tabs" aria-label="Guide sections">
+    <a href="#directions" aria-current="page"><span lang="en">Directions</span><span lang="ko">오시는 길</span><span lang="zh-Hans">路线</span></a>
+    <a href="#airport"><span lang="en">From the airport</span><span lang="ko">공항에서</span><span lang="zh-Hans">机场出发</span></a>
+    <a href="#heating"><span lang="en">Heating</span><span lang="ko">난방·온수</span><span lang="zh-Hans">暖气·热水</span></a>
+    <a href="#aircon"><span lang="en">Air con</span><span lang="ko">에어컨</span><span lang="zh-Hans">空调</span></a>
+    <a href="#delivery"><span lang="en">Delivery</span><span lang="ko">배달</span><span lang="zh-Hans">外卖</span></a>
+    <a href="#parking"><span lang="en">Parking</span><span lang="ko">주차</span><span lang="zh-Hans">停车</span></a>
+  </nav>
 </header>
 
 <main>
 
-  <!-- ================= ENGLISH ================= -->
-  <section data-lang="en">
+  <!-- ================= DIRECTIONS · 오시는 길 ================= -->
+  <section id="directions" data-panel>
     <div class="intro">
-      <h1>From Singil Station to the blue gate</h1>
-      <p>Line 1, Exit ① · about 500 m, 5 minutes on foot.</p>
+      <h1><span lang="en">From Singil Station to the blue gate</span><span lang="ko">신길역에서 파란 대문까지</span><span lang="zh-Hans">从新吉站到蓝色大门</span></h1>
+      <p><span lang="en">Line 1, Exit ① · about 500 m, 5 minutes on foot.</span><span lang="ko">1호선 1번 출구 · 약 500m, 걸어서 5분</span><span lang="zh-Hans">1号线 1号出口 · 约500米，步行5分钟</span></p>
       <div class="chips">
-        <a class="chip" href="#en-arrive">Show the gate</a>
-        <a class="chip alt" href="#en-short">No luggage? Shortcut</a>
+        <a class="chip" href="#arrive"><span lang="en">Show the gate</span><span lang="ko">대문 사진 보기</span><span lang="zh-Hans">看大门照片</span></a>
+        <a class="chip alt" href="#shortcut"><span lang="en">No luggage? Shortcut</span><span lang="ko">짐이 없다면 지름길</span><span lang="zh-Hans">没带行李？走近路</span></a>
+        <a class="chip alt" href="#airport"><span lang="en">Coming from the airport</span><span lang="ko">공항에서 오는 길</span><span lang="zh-Hans">从机场过来</span></a>
       </div>
     </div>
 
     <ol class="steps">
       <li class="step map">
-        <div class="step-head"><span class="num">🗺️</span><h2>Full route</h2></div>
-        <a class="shot" href="1.jpg"><img src="1.jpg" width="1302" height="1029" alt="Map of the walking route from Singil Station Exit 1 to the guesthouse"></a>
+        <div class="step-head"><span class="num">🗺️</span><h2><span lang="en">Full route</span><span lang="ko">전체 지도</span><span lang="zh-Hans">全程路线</span></h2></div>
+        <a class="shot" href="1.jpg"><img src="1.jpg" width="1302" height="1029" alt="Map of the walking route from Singil Station Exit 1 to the guesthouse" data-alt-ko="신길역 1번 출구에서 숙소까지 도보 경로 지도" data-alt-zh="从新吉站1号出口到住处的步行路线图"></a>
       </li>
       <li class="step">
-        <div class="step-head"><span class="num">1</span><h2>Come out of Exit ①</h2></div>
-        <a class="shot" href="2.jpg"><img src="2.jpg" width="1089" height="973" loading="lazy" alt="Singil Station Exit 1"></a>
+        <div class="step-head"><span class="num">1</span><h2><span lang="en">Come out of Exit ①</span><span lang="ko">1번 출구로 나오세요</span><span lang="zh-Hans">从1号出口出来</span></h2></div>
+        <a class="shot" href="2.jpg"><img src="2.jpg" width="1089" height="973" loading="lazy" alt="Singil Station Exit 1" data-alt-ko="신길역 1번 출구" data-alt-zh="新吉站1号出口"></a>
       </li>
       <li class="step">
-        <div class="step-head"><span class="num">2</span><h2>Go straight until you reach the crosswalk</h2></div>
-        <a class="shot" href="3.jpg"><img src="3.jpg" width="1228" height="971" loading="lazy" alt="Walk straight along the road"></a>
+        <div class="step-head"><span class="num">2</span><h2><span lang="en">Go straight until you reach the crosswalk</span><span lang="ko">횡단보도가 나올 때까지 직진하세요</span><span lang="zh-Hans">一直往前走，直到看到人行横道</span></h2></div>
+        <a class="shot" href="3.jpg"><img src="3.jpg" width="1228" height="971" loading="lazy" alt="Walk straight along the road" data-alt-ko="길을 따라 직진" data-alt-zh="沿着马路直走"></a>
       </li>
       <li class="step">
-        <div class="step-head"><span class="num">3</span><h2>Cross at the crosswalk</h2></div>
-        <a class="shot" href="4.jpg"><img src="4.jpg" width="1151" height="740" loading="lazy" alt="The crosswalk"></a>
+        <div class="step-head"><span class="num">3</span><h2><span lang="en">Cross at the crosswalk</span><span lang="ko">횡단보도를 건너세요</span><span lang="zh-Hans">过人行横道</span></h2></div>
+        <a class="shot" href="4.jpg"><img src="4.jpg" width="1151" height="740" loading="lazy" alt="The crosswalk" data-alt-ko="횡단보도" data-alt-zh="人行横道"></a>
       </li>
       <li class="step">
-        <div class="step-head"><span class="num">4</span><h2>Walk straight toward Yeongdeungpo Girls’ High School</h2></div>
-        <a class="shot" href="5.jpg"><img src="5.jpg" width="1280" height="937" loading="lazy" alt="Yeongdeungpo Girls' High School building ahead"></a>
+        <div class="step-head"><span class="num">4</span><h2><span lang="en">Walk straight toward Yeongdeungpo Girls’ High School</span><span lang="ko">영등포여자고등학교 건물을 바라보며 직진</span><span lang="zh-Hans">朝着永登浦女子高中的方向直走</span></h2></div>
+        <a class="shot" href="5.jpg"><img src="5.jpg" width="1280" height="937" loading="lazy" alt="Yeongdeungpo Girls' High School building ahead" data-alt-ko="정면의 영등포여고 건물" data-alt-zh="前方的永登浦女子高中"></a>
       </li>
       <li class="step">
-        <div class="step-head"><span class="num">5</span><h2>Pass the CU convenience store</h2></div>
-        <a class="shot" href="6.jpg"><img src="6.jpg" width="893" height="718" loading="lazy" alt="CU convenience store on the right"></a>
+        <div class="step-head"><span class="num">5</span><h2><span lang="en">Pass the CU convenience store</span><span lang="ko">CU 편의점을 지나서</span><span lang="zh-Hans">经过CU便利店</span></h2></div>
+        <a class="shot" href="6.jpg"><img src="6.jpg" width="893" height="718" loading="lazy" alt="CU convenience store on the right" data-alt-ko="오른쪽 CU 편의점" data-alt-zh="右边的CU便利店"></a>
       </li>
       <li class="step">
-        <div class="step-head"><span class="num">6</span><h2>After the brick wall, take the stairs just up the alley on the right</h2></div>
-        <a class="shot" href="7.jpg"><img src="7.jpg" width="1126" height="778" loading="lazy" alt="Alley and stairs on the right"></a>
+        <div class="step-head"><span class="num">6</span><h2><span lang="en">After the brick wall, take the stairs just up the alley on the right</span><span lang="ko">담벼락을 지나 오른쪽 골목 바로 위 계단</span><span lang="zh-Hans">过了围墙，走右边小巷口上方的楼梯</span></h2></div>
+        <a class="shot" href="7.jpg"><img src="7.jpg" width="1126" height="778" loading="lazy" alt="Alley and stairs on the right" data-alt-ko="오른쪽 골목과 계단" data-alt-zh="右边的小巷和楼梯"></a>
       </li>
-      <li class="step" id="en-arrive">
-        <div class="step-head"><span class="num">7</span><h2>The blue gate, No. 24. You’re here</h2></div>
-        <a class="shot" href="8.jpg"><img src="8.jpg" width="1262" height="829" loading="lazy" alt="The blue gate at Yeongdeungpo-ro 62-gil 24"></a>
+      <li class="step" id="arrive">
+        <div class="step-head"><span class="num">7</span><h2><span lang="en">The blue gate, No. 24. You’re here</span><span lang="ko">24번지 파란 대문, 도착!</span><span lang="zh-Hans">24号蓝色大门，到了！</span></h2></div>
+        <a class="shot" href="8.jpg"><img src="8.jpg" width="1262" height="829" loading="lazy" alt="The blue gate at Yeongdeungpo-ro 62-gil 24" data-alt-ko="영등포로62길 24 파란 대문" data-alt-zh="永登浦路62街24号的蓝色大门"></a>
       </li>
     </ol>
 
     <div class="arrive">
-      <strong>You made it!</strong>
-      <p>Push the blue gate to open it.</p>
+      <strong><span lang="en">You made it!</span><span lang="ko">도착했어요! 대단해요!</span><span lang="zh-Hans">到啦！辛苦了！</span></strong>
+      <p><span lang="en">Push the blue gate to open it.</span><span lang="ko">파란 대문은 밀어서 열어주세요.</span><span lang="zh-Hans">蓝色大门往里推就能打开。</span></p>
     </div>
 
-    <h2 class="section-title">Getting around from here</h2>
-    <a class="shot" href="map_blue.jpg"><img src="map_blue.jpg" width="2576" height="2191" loading="lazy" alt="Seoul metro map with travel times from Singil"></a>
-    <p class="hint">Tap any image to open it full size and zoom in.</p>
+    <h2 class="section-title"><span lang="en">Getting around from here</span><span lang="ko">여기서 가는 길</span><span lang="zh-Hans">从这里出发去各地</span></h2>
+    <a class="shot" href="map_blue.jpg"><img src="map_blue.jpg" width="4580" height="3895" loading="lazy" alt="Seoul metro map with travel times from Singil" data-alt-ko="신길역 기준 소요시간이 표시된 서울 지하철 노선도" data-alt-zh="标有从新吉站出发所需时间的首尔地铁线路图"></a>
+    <p class="hint"><span lang="en">Tap any image to open it full size and zoom in.</span><span lang="ko">사진을 누르면 원본 크기로 열려서 확대해 볼 수 있어요.</span><span lang="zh-Hans">点击图片可打开原图并放大查看。</span></p>
 
-    <details class="short" id="en-short">
-      <summary><span>Shortcut, 180 m · 2 min<small>Route from the gate to the station. No suitcase only (stairs). Coming in, walk it in reverse.</small></span></summary>
+    <details class="short" id="shortcut">
+      <summary><span>
+        <span lang="en">Shortcut, 180 m · 2 min</span><span lang="ko">지름길 180m · 2분</span><span lang="zh-Hans">近路 180米 · 2分钟</span>
+        <small><span lang="en">Route from the gate to the station. No suitcase only (stairs). Coming in, walk it in reverse.</span><span lang="ko">숙소에서 역으로 가는 길이에요. 계단이 있어 캐리어 없을 때만! 올 때는 반대로 오세요.</span><span lang="zh-Hans">这是从住处去车站的路。有楼梯，只适合没带行李箱时走。来的时候反着走即可。</span></small>
+      </span></summary>
       <div class="inner">
         <ol class="steps">
           <li class="step map">
-            <div class="step-head"><span class="num">🗺️</span><h2>Shortcut route</h2></div>
-            <a class="shot" href="s1.jpg"><img src="s1.jpg" width="1234" height="690" loading="lazy" alt="Shortcut route map"></a>
+            <div class="step-head"><span class="num">🗺️</span><h2><span lang="en">Shortcut route</span><span lang="ko">지름길 지도</span><span lang="zh-Hans">近路地图</span></h2></div>
+            <a class="shot" href="s1.jpg"><img src="s1.jpg" width="1234" height="690" loading="lazy" alt="Shortcut route map" data-alt-ko="지름길 경로 지도" data-alt-zh="近路路线图"></a>
           </li>
           <li class="step">
-            <div class="step-head"><span class="num">1</span><h2>Leave the gate and go down the stairs, then right</h2></div>
-            <a class="shot" href="s2.jpg"><img src="s2.jpg" width="1222" height="959" loading="lazy" alt="Stairs and alley right outside the guesthouse"></a>
+            <div class="step-head"><span class="num">1</span><h2><span lang="en">Leave the gate and go down the stairs, then right</span><span lang="ko">대문을 나와 계단을 내려간 뒤 오른쪽 골목으로</span><span lang="zh-Hans">出大门走下楼梯，然后往右走</span></h2></div>
+            <a class="shot" href="s2.jpg"><img src="s2.jpg" width="1222" height="959" loading="lazy" alt="Stairs and alley right outside the guesthouse" data-alt-ko="숙소 앞 계단과 골목" data-alt-zh="住处门口的楼梯和小巷"></a>
           </li>
           <li class="step">
-            <div class="step-head"><span class="num">2</span><h2>Follow the alley past the pink wall</h2></div>
-            <a class="shot" href="s3.jpg"><img src="s3.jpg" width="1227" height="960" loading="lazy" alt="Pink wall at the corner"></a>
+            <div class="step-head"><span class="num">2</span><h2><span lang="en">Follow the alley past the pink wall</span><span lang="ko">분홍색 벽이 보일 때까지 골목을 따라 직진</span><span lang="zh-Hans">沿着小巷走，经过粉色的墙</span></h2></div>
+            <a class="shot" href="s3.jpg"><img src="s3.jpg" width="1227" height="960" loading="lazy" alt="Pink wall at the corner" data-alt-ko="모퉁이의 분홍색 벽" data-alt-zh="拐角处的粉色墙"></a>
           </li>
           <li class="step">
-            <div class="step-head"><span class="num">3</span><h2>Under the overpass is the subway entrance</h2></div>
-            <a class="shot" href="s4.jpg"><img src="s4.jpg" width="1223" height="959" loading="lazy" alt="Overpass with the metro entrance underneath; stairs on the left go to the bus stop"></a>
+            <div class="step-head"><span class="num">3</span><h2><span lang="en">Under the overpass is the subway entrance</span><span lang="ko">고가 아래 지하차도로 들어가면 신길역이에요</span><span lang="zh-Hans">高架桥下面就是地铁入口</span></h2></div>
+            <a class="shot" href="s4.jpg"><img src="s4.jpg" width="1223" height="959" loading="lazy" alt="Overpass with the metro entrance underneath; stairs on the left go to the bus stop" data-alt-ko="고가 아래 지하철 입구, 왼쪽 계단은 버스 정류장" data-alt-zh="高架桥下的地铁入口，左边楼梯通往公交站"></a>
           </li>
         </ol>
       </div>
     </details>
   </section>
 
-  <!-- ================= 한국어 ================= -->
-  <section data-lang="ko" hidden>
+  <!-- ================= AIRPORT · 공항에서 ================= -->
+  <section id="airport" data-panel>
     <div class="intro">
-      <h1>신길역에서 파란 대문까지</h1>
-      <p>1호선 1번 출구 · 약 500m, 걸어서 5분</p>
-      <div class="chips">
-        <a class="chip" href="#ko-arrive">대문 사진 보기</a>
-        <a class="chip alt" href="#ko-short">짐이 없다면 지름길</a>
-      </div>
+      <h1><span lang="en">From Incheon Airport</span><span lang="ko">인천공항에서 오는 길</span><span lang="zh-Hans">从仁川机场过来</span></h1>
+      <p><span lang="en">Airport Railroad, then Line 5. One transfer at Gimpo Airport.</span><span lang="ko">공항철도 → 5호선, 김포공항역에서 한 번 환승</span><span lang="zh-Hans">机场铁路 → 5号线，在金浦机场站换乘一次</span></p>
     </div>
 
     <ol class="steps">
       <li class="step map">
-        <div class="step-head"><span class="num">🗺️</span><h2>전체 지도</h2></div>
-        <a class="shot" href="1.jpg"><img src="1.jpg" width="1302" height="1029" alt="신길역 1번 출구에서 숙소까지 도보 경로 지도"></a>
+        <div class="step-head"><span class="num">🗺️</span><h2><span lang="en">Train route</span><span lang="ko">전철 경로</span><span lang="zh-Hans">乘车路线</span></h2></div>
+        <a class="shot" href="rail2.png"><img src="rail2.png" width="1136" height="1172" loading="lazy" alt="Route from Incheon Airport Terminal 1 by Airport Railroad to Gimpo Airport, then Line 5 to Singil" data-alt-ko="인천공항 1터미널에서 공항철도로 김포공항, 5호선으로 신길역까지 가는 경로" data-alt-zh="从仁川机场第1航站楼乘机场铁路到金浦机场，再换乘5号线到新吉站的路线"></a>
       </li>
       <li class="step">
-        <div class="step-head"><span class="num">1</span><h2>1번 출구로 나오세요</h2></div>
-        <a class="shot" href="2.jpg"><img src="2.jpg" width="1089" height="973" loading="lazy" alt="신길역 1번 출구"></a>
+        <div class="step-head"><span class="num">1</span><h2><span lang="en">Take the Airport Railroad toward Seoul Station</span><span lang="ko">공항철도 서울역 방면 탑승</span><span lang="zh-Hans">乘坐开往首尔站的机场铁路</span></h2></div>
       </li>
       <li class="step">
-        <div class="step-head"><span class="num">2</span><h2>횡단보도가 나올 때까지 직진하세요</h2></div>
-        <a class="shot" href="3.jpg"><img src="3.jpg" width="1228" height="971" loading="lazy" alt="길을 따라 직진"></a>
+        <div class="step-head"><span class="num">2</span><h2><span lang="en">Get off at Gimpo Airport</span><span lang="ko">김포공항역에서 하차</span><span lang="zh-Hans">在金浦机场站下车</span></h2></div>
+        <p class="say"><span lang="en">7 stops from Terminal 1.</span><span lang="ko">1터미널에서 7개 역이에요.</span><span lang="zh-Hans">从第1航站楼坐7站。</span></p>
       </li>
       <li class="step">
-        <div class="step-head"><span class="num">3</span><h2>횡단보도를 건너세요</h2></div>
-        <a class="shot" href="4.jpg"><img src="4.jpg" width="1151" height="740" loading="lazy" alt="횡단보도"></a>
+        <div class="step-head"><span class="num">3</span><h2><span lang="en">Transfer to Line 5 toward Hanam Geomdansan</span><span lang="ko">5호선 하남검단산 방면으로 환승</span><span lang="zh-Hans">换乘5号线，往河南黔丹山方向</span></h2></div>
+        <p class="say"><span lang="en">Ride 13 stops. Board at door <span class="k">2-1</span> or <span class="k">5-2</span> for the quickest exit.</span><span lang="ko">13개 역을 가요. 빠른 하차는 <span class="k">2-1, 5-2</span>번 문이에요.</span><span lang="zh-Hans">坐13站。在<span class="k">2-1</span>或<span class="k">5-2</span>号车门上车，下车最方便。</span></p>
       </li>
       <li class="step">
-        <div class="step-head"><span class="num">4</span><h2>영등포여자고등학교 건물을 바라보며 직진</h2></div>
-        <a class="shot" href="5.jpg"><img src="5.jpg" width="1280" height="937" loading="lazy" alt="정면의 영등포여고 건물"></a>
-      </li>
-      <li class="step">
-        <div class="step-head"><span class="num">5</span><h2>CU 편의점을 지나서</h2></div>
-        <a class="shot" href="6.jpg"><img src="6.jpg" width="893" height="718" loading="lazy" alt="오른쪽 CU 편의점"></a>
-      </li>
-      <li class="step">
-        <div class="step-head"><span class="num">6</span><h2>담벼락을 지나 오른쪽 골목 바로 위 계단</h2></div>
-        <a class="shot" href="7.jpg"><img src="7.jpg" width="1126" height="778" loading="lazy" alt="오른쪽 골목과 계단"></a>
-      </li>
-      <li class="step" id="ko-arrive">
-        <div class="step-head"><span class="num">7</span><h2>24번지 파란 대문, 도착!</h2></div>
-        <a class="shot" href="8.jpg"><img src="8.jpg" width="1262" height="829" loading="lazy" alt="영등포로62길 24 파란 대문"></a>
+        <div class="step-head"><span class="num">4</span><h2><span lang="en">Get off at Singil</span><span lang="ko">신길역에서 하차</span><span lang="zh-Hans">在新吉站下车</span></h2></div>
+        <p class="say"><span lang="en">Doors open on the right. Follow the signs to Exit ①, then use the walking directions.</span><span lang="ko">내리는 문은 오른쪽이에요. 1번 출구 표지판을 따라 나온 뒤 도보 안내를 보세요.</span><span lang="zh-Hans">右侧开门。跟着指示牌走到1号出口，然后看步行路线。</span></p>
       </li>
     </ol>
 
-    <div class="arrive">
-      <strong>도착했어요! 대단해요!</strong>
-      <p>파란 대문은 밀어서 열어주세요.</p>
+    <a class="btn naver" href="https://naver.me/GHVMSH65" target="_blank" rel="noopener"><span lang="en">Open this route in Naver Map</span><span lang="ko">네이버 지도에서 경로 보기</span><span lang="zh-Hans">在 Naver 地图中查看路线</span></a>
+    <a class="btn" href="#directions"><span lang="en">Walking directions from Exit ①</span><span lang="ko">1번 출구부터 걸어오는 길</span><span lang="zh-Hans">从1号出口步行的路线</span></a>
+  </section>
+
+  <!-- ================= HEATING · 난방 ================= -->
+  <section id="heating" data-panel>
+    <div class="intro">
+      <h1><span lang="en">Heating and hot water</span><span lang="ko">난방·온수 사용법</span><span lang="zh-Hans">暖气和热水的使用方法</span></h1>
     </div>
 
-    <h2 class="section-title">여기서 가는 길</h2>
-    <a class="shot" href="map_blue.jpg"><img src="map_blue.jpg" width="2576" height="2191" loading="lazy" alt="신길역 기준 소요시간이 표시된 서울 지하철 노선도"></a>
-    <p class="hint">사진을 누르면 원본 크기로 열려서 확대해 볼 수 있어요.</p>
+    <ol class="steps">
+      <li class="step icon">
+        <div class="step-head"><span class="num">🎛️</span><h2><span lang="en">Reading the boiler panel</span><span lang="ko">보일러 화면 보는 법</span><span lang="zh-Hans">锅炉面板说明</span></h2></div>
+        <p class="say"><span lang="en">When <span class="k">난방</span> (heating) is lit, the heating is on. <span class="k">온수</span> is hot water. Left number: current temperature. Right number: the temperature you set.</span><span lang="ko">화면에 <span class="k">난방</span>이 켜져 있으면 난방 중이에요. <span class="k">온수</span>는 온수 표시예요. 왼쪽 숫자는 현재 온도, 오른쪽은 희망 온도예요.</span><span lang="zh-Hans">显示屏上 <span class="k">난방</span>（暖气）亮着表示暖气已开启，<span class="k">온수</span>表示热水。左边数字是当前温度，右边是设定温度。</span></p>
+        <a class="shot" href="gas-on.png"><img src="gas-on.png" width="999" height="786" loading="lazy" alt="Kiturami boiler control panel with the heating, hot water, dial, going-out and power buttons labelled" data-alt-ko="난방, 온수, 다이얼, 외출, 전원 버튼이 표시된 귀뚜라미 보일러 조절기" data-alt-zh="标有暖气、热水、旋钮、外出和电源按钮的 Kiturami 锅炉控制面板"></a>
+      </li>
+    </ol>
 
-    <details class="short" id="ko-short">
-      <summary><span>지름길 180m · 2분<small>숙소에서 역으로 가는 길이에요. 계단이 있어 캐리어 없을 때만! 올 때는 반대로 오세요.</small></span></summary>
-      <div class="inner">
-        <ol class="steps">
-          <li class="step map">
-            <div class="step-head"><span class="num">🗺️</span><h2>지름길 지도</h2></div>
-            <a class="shot" href="s1.jpg"><img src="s1.jpg" width="1234" height="690" loading="lazy" alt="지름길 경로 지도"></a>
-          </li>
-          <li class="step">
-            <div class="step-head"><span class="num">1</span><h2>대문을 나와 계단을 내려간 뒤 골목으로</h2></div>
-            <a class="shot" href="s2.jpg"><img src="s2.jpg" width="1222" height="959" loading="lazy" alt="숙소 앞 계단과 골목"></a>
-          </li>
-          <li class="step">
-            <div class="step-head"><span class="num">2</span><h2>분홍색 벽 옆 골목을 따라가세요</h2></div>
-            <a class="shot" href="s3.jpg"><img src="s3.jpg" width="1227" height="960" loading="lazy" alt="모퉁이의 분홍색 벽"></a>
-          </li>
-          <li class="step">
-            <div class="step-head"><span class="num">3</span><h2>고가 아래가 지하철 입구예요</h2></div>
-            <a class="shot" href="s4.jpg"><img src="s4.jpg" width="1223" height="959" loading="lazy" alt="고가 아래 지하철 입구, 왼쪽 계단은 버스 정류장"></a>
-          </li>
-        </ol>
-      </div>
-    </details>
+    <p class="note"><span lang="en">💧 Hot water must stay set at 60°C 🌡</span><span lang="ko">💧 온수는 60°C로 설정되어 있어야 해요 🌡</span><span lang="zh-Hans">💧 热水必须设置在60°C 🌡</span></p>
+
+    <ol class="steps">
+      <li class="step icon">
+        <div class="step-head"><span class="num">🌡️</span><h2><span lang="en">Set the room temperature</span><span lang="ko">실내 온도 설정</span><span lang="zh-Hans">设置室内温度</span></h2></div>
+        <p class="say"><span lang="en">Press the <span class="k">난방</span> (heating) button, then turn the dial to the temperature you want.</span><span lang="ko"><span class="k">난방</span> 버튼을 누르고 다이얼을 돌려 원하는 실내 온도로 맞추세요.</span><span lang="zh-Hans">按下 <span class="k">난방</span>（暖气）按钮，再转动旋钮调到想要的室内温度。</span></p>
+        <a class="shot" href="gas-1.png"><img src="gas-1.png" width="568" height="586" loading="lazy" alt="Pressing the heating button on the boiler panel" data-alt-ko="보일러 조절기의 난방 버튼 누르기" data-alt-zh="按下锅炉面板上的暖气按钮"></a>
+      </li>
+      <li class="step icon">
+        <div class="step-head"><span class="num">❓</span><h2><span lang="en">Room not warming up?</span><span lang="ko">난방을 켰는데 방이 따뜻해지지 않나요?</span><span lang="zh-Hans">开了暖气房间还是不暖？</span></h2></div>
+        <p class="say"><span lang="en">Check the display. If it shows <span class="k">온돌</span> (underfloor) and 75°C, press the <span class="k">난방</span> button once more.</span><span lang="ko">화면을 확인하세요. <span class="k">온돌</span> 75°C로 되어 있으면 <span class="k">난방</span> 버튼을 한 번 더 눌러주세요.</span><span lang="zh-Hans">请看显示屏。如果显示 <span class="k">온돌</span>（地暖）和75°C，请再按一次 <span class="k">난방</span> 按钮。</span></p>
+        <a class="shot" href="B1.png"><img src="B1.png" width="603" height="801" loading="lazy" alt="Boiler display showing underfloor mode at 75°C" data-alt-ko="온돌 75°C가 표시된 보일러 화면" data-alt-zh="显示地暖模式75°C的锅炉屏幕"></a>
+      </li>
+    </ol>
+  </section>
+
+  <!-- ================= AIR CON · 에어컨 ================= -->
+  <section id="aircon" data-panel>
+    <div class="intro">
+      <h1><span lang="en">Using the air conditioner</span><span lang="ko">에어컨 사용법</span><span lang="zh-Hans">空调使用方法</span></h1>
+    </div>
+
+    <p class="note"><span lang="en">❄️ It must be set to cooling mode (냉방).</span><span lang="ko">❄️ 반드시 냉방 모드로 설정해주세요.</span><span lang="zh-Hans">❄️ 必须设置为制冷模式（냉방）。</span></p>
+
+    <ol class="steps">
+      <li class="step icon">
+        <div class="step-head"><span class="num">❄️</span><h2><span lang="en">Switch to cooling, then lower the temperature</span><span lang="ko">냉방 모드로 바꾸고 온도를 낮추세요</span><span lang="zh-Hans">切换到制冷，再调低温度</span></h2></div>
+        <p class="say"><span lang="en">Press <span class="k">모드</span> (Mode) until <span class="k">냉방</span> appears, lower the temperature and wait a moment. Cool air will start to come out.</span><span lang="ko"><span class="k">모드</span> 버튼을 눌러 <span class="k">냉방</span>이 표시되게 한 뒤 온도를 낮추고 잠시 기다리면 시원한 바람이 나와요.</span><span lang="zh-Hans">按 <span class="k">모드</span>（模式）键直到显示 <span class="k">냉방</span>，调低温度后稍等片刻，就会吹出冷风。</span></p>
+        <a class="shot" href="cool.png"><img src="cool.png" width="529" height="651" loading="lazy" alt="Air conditioner remote showing the Mode button and cooling mode on the display" data-alt-ko="모드 버튼과 냉방 표시가 보이는 에어컨 리모컨" data-alt-zh="显示模式键和制冷模式的空调遥控器"></a>
+      </li>
+    </ol>
+  </section>
+
+  <!-- ================= DELIVERY · 배달 ================= -->
+  <section id="delivery" data-panel>
+    <div class="intro">
+      <h1><span lang="en">Delivery address</span><span lang="ko">배달 주소</span><span lang="zh-Hans">外卖地址</span></h1>
+    </div>
+
+    <p class="note"><span lang="en">Always include your room number and “뒷골목” (back alley).</span><span lang="ko">방 번호(호수)와 ‘뒷골목’을 꼭 입력해주세요.</span><span lang="zh-Hans">请务必填写房间号和“뒷골목”（后巷）。</span></p>
+
+    <div class="field">
+      <label for="room"><span lang="en">Your room number</span><span lang="ko">방 번호(호수)</span><span lang="zh-Hans">你的房间号</span></label>
+      <input id="room" type="text" inputmode="numeric" autocomplete="off" maxlength="6" placeholder="000" aria-describedby="room-err">
+      <p class="err" id="room-err" role="alert" hidden><span lang="en">Enter your room number first.</span><span lang="ko">방 번호를 먼저 입력해주세요.</span><span lang="zh-Hans">请先输入房间号。</span></p>
+      <p class="err" id="copy-err" role="alert" hidden><span lang="en">Couldn’t copy. Press and hold the address to copy it.</span><span lang="ko">복사하지 못했어요. 주소를 길게 눌러 복사해주세요.</span><span lang="zh-Hans">复制失败，请长按地址手动复制。</span></p>
+    </div>
+
+    <div class="addr">
+      <p class="label"><span lang="en">Full address</span><span lang="ko">전체 주소</span><span lang="zh-Hans">完整地址</span></p>
+      <p class="text" id="addr-full">서울특별시 영등포구 영등포로62길 24, 뒷골목 파란 대문 <span class="room-out">○○○</span>호</p>
+      <button type="button" class="copy" data-copy="addr-full"><span class="idle"><span lang="en">Copy</span><span lang="ko">복사</span><span lang="zh-Hans">复制</span></span><span class="done"><span lang="en">Copied ✓</span><span lang="ko">복사됨 ✓</span><span lang="zh-Hans">已复制 ✓</span></span></button>
+    </div>
+
+    <div class="addr">
+      <p class="label"><span lang="en">Detail address (상세주소)</span><span lang="ko">상세주소</span><span lang="zh-Hans">详细地址（상세주소）</span></p>
+      <p class="text" id="addr-detail">뒷골목 파란 대문 <span class="room-out">○○○</span>호</p>
+      <button type="button" class="copy" data-copy="addr-detail"><span class="idle"><span lang="en">Copy</span><span lang="ko">복사</span><span lang="zh-Hans">复制</span></span><span class="done"><span lang="en">Copied ✓</span><span lang="ko">복사됨 ✓</span><span lang="zh-Hans">已复制 ✓</span></span></button>
+    </div>
+
+    <p class="hint"><span lang="en">In a delivery app, paste the detail address into the 상세주소 field.</span><span lang="ko">배달앱에서는 상세주소 칸에 붙여넣으세요.</span><span lang="zh-Hans">在外卖 App 里，把详细地址粘贴到 상세주소 一栏。</span></p>
+  </section>
+
+  <!-- ================= PARKING · 공영주차장 ================= -->
+  <section id="parking" data-panel>
+    <div class="intro">
+      <h1><span lang="en">Public parking nearby</span><span lang="ko">공영주차장 안내</span><span lang="zh-Hans">附近的公共停车场</span></h1>
+      <p><span lang="en">Yeongdeungpo Girls’ High School public parking lot.</span><span lang="ko">영등포여고 공영주차장</span><span lang="zh-Hans">永登浦女子高中公共停车场。</span></p>
+    </div>
+
+    <a class="shot" href="park.jpg"><img src="park.jpg" width="640" height="516" loading="lazy" alt="Information sign at the Yeongdeungpo Girls' High School public parking lot" data-alt-ko="영등포여고 공영주차장 이용안내 표지판" data-alt-zh="永登浦女子高中公共停车场的说明牌"></a>
+
+    <h2 class="section-title"><span lang="en">Fees</span><span lang="ko">주차 요금</span><span lang="zh-Hans">收费标准</span></h2>
+    <ul class="facts">
+      <li><span lang="en">50 won per 5 minutes (600 won per hour)</span><span lang="ko">5분당 50원 (1시간 600원)</span><span lang="zh-Hans">每5分钟50韩元（每小时600韩元）</span></li>
+      <li><span lang="en">Open 24 hours, every day · card payment only</span><span lang="ko">24시간, 연중무휴 · 카드 결제 전용</span><span lang="zh-Hans">24小时，全年无休 · 仅限刷卡</span></li>
+    </ul>
+    <table class="fees">
+      <thead>
+        <tr>
+          <th><span lang="en">Parking time</span><span lang="ko">주차 시간</span><span lang="zh-Hans">停车时长</span></th>
+          <th><span lang="en">Estimated fee</span><span lang="ko">예상 요금</span><span lang="zh-Hans">预计费用</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><span lang="en">6 hours</span><span lang="ko">6시간</span><span lang="zh-Hans">6小时</span></td><td>₩3,600</td></tr>
+        <tr><td><span lang="en">12 hours</span><span lang="ko">12시간</span><span lang="zh-Hans">12小时</span></td><td>₩7,200</td></tr>
+        <tr><td><span lang="en">24 hours (1 day)</span><span lang="ko">24시간 (1일)</span><span lang="zh-Hans">24小时（1天）</span></td><td>₩14,400</td></tr>
+      </tbody>
+    </table>
+
+    <a class="btn naver" href="https://naver.me/xtgJXQv9" target="_blank" rel="noopener"><span lang="en">Open the parking lot in Naver Map</span><span lang="ko">공영주차장 네이버 지도 바로가기</span><span lang="zh-Hans">在 Naver 地图中查看停车场</span></a>
   </section>
 
 </main>
 
 <script>
 (function () {
-  var buttons = document.querySelectorAll('[data-set-lang]');
-  var sections = document.querySelectorAll('section[data-lang]');
+  var root = document.documentElement;
+  var bar = document.querySelector('.bar');
+  var nav = document.querySelector('.tabs');
+  var langButtons = document.querySelectorAll('[data-set-lang]');
+  var tabs = document.querySelectorAll('.tabs a');
+  var panels = Array.prototype.slice.call(document.querySelectorAll('[data-panel]'));
+  // links shared before the redesign keep working
+  var alias = { 'en-arrive': 'arrive', 'ko-arrive': 'arrive', 'en-short': 'shortcut', 'ko-short': 'shortcut' };
 
+  function save(key, value) { try { localStorage.setItem(key, value); } catch (e) {} }
+  function load(key) { try { return localStorage.getItem(key); } catch (e) { return null; } }
+
+  /* ---------- language ---------- */
   function setLang(lang) {
-    sections.forEach(function (s) { s.hidden = s.dataset.lang !== lang; });
-    buttons.forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.setLang === lang)); });
-    document.documentElement.lang = lang;
-    try { localStorage.setItem('singil-lang', lang); } catch (e) {}
+    root.setAttribute('data-ui', lang);
+    root.lang = lang === 'zh' ? 'zh-Hans' : lang;
+    langButtons.forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.setLang === lang)); });
+    document.querySelectorAll('img[data-alt-ko]').forEach(function (img) {
+      if (!img.hasAttribute('data-alt-en')) img.setAttribute('data-alt-en', img.alt);
+      img.alt = img.getAttribute('data-alt-' + lang) || img.getAttribute('data-alt-en');
+    });
+    save('singil-lang', lang);
+    measureBar();
   }
 
-  buttons.forEach(function (b) {
-    b.addEventListener('click', function () { setLang(b.dataset.setLang); window.scrollTo(0, 0); });
+  langButtons.forEach(function (b) {
+    b.addEventListener('click', function () { setLang(b.dataset.setLang); });
   });
 
-  // open the shortcut panel when its chip is tapped
-  document.querySelectorAll('a[href$="-short"]').forEach(function (a) {
+  /* ---------- header height for anchor offsets ---------- */
+  function measureBar() { root.style.setProperty('--bar-h', bar.offsetHeight + 'px'); }
+  window.addEventListener('resize', measureBar);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(measureBar);
+
+  /* ---------- sections (#directions, #airport, #heating, #aircon, #delivery, #parking) ---------- */
+  function showPanel(panel) {
+    panels.forEach(function (p) { p.hidden = p !== panel; });
+    tabs.forEach(function (t) {
+      if (t.getAttribute('href') === '#' + panel.id) {
+        t.setAttribute('aria-current', 'page');
+        nav.scrollLeft = t.offsetLeft - (nav.clientWidth - t.offsetWidth) / 2;
+      } else {
+        t.removeAttribute('aria-current');
+      }
+    });
+  }
+
+  function route() {
+    var id = decodeURIComponent(location.hash.slice(1));
+    id = alias[id] || id;
+    var el = id ? document.getElementById(id) : null;
+    var panel = null;
+    if (el) panel = el.hasAttribute('data-panel') ? el : el.closest('[data-panel]');
+    showPanel(panel || panels[0]);
+    if (el && el !== panel) {
+      if (el.tagName === 'DETAILS') el.open = true;
+      el.scrollIntoView();
+    } else {
+      window.scrollTo(0, 0);
+    }
+  }
+
+  window.addEventListener('hashchange', route);
+  // tapping a link to the hash you're already on (e.g. the shortcut chip twice) still works
+  document.querySelectorAll('a[href^="#"]').forEach(function (a) {
     a.addEventListener('click', function () {
-      var d = document.querySelector(a.getAttribute('href'));
-      if (d) d.open = true;
+      if (a.getAttribute('href') === location.hash) setTimeout(route, 0);
     });
   });
 
-  var saved = null;
-  try { saved = localStorage.getItem('singil-lang'); } catch (e) {}
-  var lang = saved || ((navigator.language || '').toLowerCase().indexOf('ko') === 0 ? 'ko' : 'en');
+  /* ---------- delivery: room number + copy ---------- */
+  var roomInput = document.getElementById('room');
+  var roomErr = document.getElementById('room-err');
+  var copyErr = document.getElementById('copy-err');
+  var roomOuts = document.querySelectorAll('.room-out');
+
+  function room() { return roomInput.value.trim(); }
+  function renderRoom() {
+    var r = room();
+    roomOuts.forEach(function (o) { o.textContent = r || '○○○'; });
+    save('singil-room', r);
+  }
+  roomInput.value = load('singil-room') || '';
+  renderRoom();
+  roomInput.addEventListener('input', function () { roomErr.hidden = true; copyErr.hidden = true; renderRoom(); });
+
+  function copyText(text, done) {
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(function () { done(true); }, function () { done(fallbackCopy(text)); });
+    } else {
+      done(fallbackCopy(text));
+    }
+  }
+  function fallbackCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed';
+    ta.style.left = '-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) {}
+    document.body.removeChild(ta);
+    return ok;
+  }
+
+  document.querySelectorAll('[data-copy]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      copyErr.hidden = true;
+      if (!room()) { roomErr.hidden = false; roomInput.focus(); return; }
+      var text = document.getElementById(btn.dataset.copy).textContent.replace(/\s+/g, ' ').trim();
+      copyText(text, function (ok) {
+        if (!ok) { copyErr.hidden = false; return; }
+        btn.classList.add('is-done');
+        setTimeout(function () { btn.classList.remove('is-done'); }, 2000);
+      });
+    });
+  });
+
+  /* ---------- start ---------- */
+  var nl = (navigator.language || '').toLowerCase();
+  var lang = load('singil-lang') || (nl.indexOf('ko') === 0 ? 'ko' : nl.indexOf('zh') === 0 ? 'zh' : 'en');
   setLang(lang);
+  route();
 })();
 </script>
 </body>
